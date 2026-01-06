@@ -13,7 +13,6 @@
       box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
     }
-
     body {
       margin: 0;
       background: #0b0b0b;
@@ -21,19 +20,28 @@
     }
 
     /* ================= HERO SECTION ================= */
-   .hero {
-  height: 100vh;
-  background: url("Dropset pin (3).png");
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-size: contain; /* 👈 prevents zoom */
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 0; /* ❌ remove extra space */
-}
+    .hero {
+      height: 100vh;
+      background: url("Dropset pin (3).png");
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-size: contain;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 0;
+    }
 
-
+    /* ===== MOBILE FIX: REMOVE GAP BELOW IMAGE ===== */
+    @media (max-width: 768px) {
+      .hero {
+        height: auto;
+        aspect-ratio: 9 / 16;
+      }
+      .section {
+        padding-top: 20px;
+      }
+    }
 
     /* ================= FLOATING ORDER BUTTON ================= */
     .float-btn {
@@ -50,7 +58,7 @@
       border: none;
       cursor: pointer;
       z-index: 999;
-      text-decoration: none; /* ❌ NO UNDERLINE */
+      text-decoration: none;
     }
 
     /* ================= DESCRIPTION ================= */
@@ -59,12 +67,10 @@
       max-width: 900px;
       margin: auto;
     }
-
     .bullets {
       list-style: none;
       padding: 0;
     }
-
     .bullets li {
       margin: 14px 0;
       font-size: 18px;
@@ -77,8 +83,7 @@
       border-radius: 16px;
       box-shadow: 0 0 40px rgba(0,0,0,.6);
     }
-
-    input, textarea {
+    input {
       width: 100%;
       margin-bottom: 14px;
       padding: 14px;
@@ -86,10 +91,6 @@
       border: none;
       background: #f1f5ff;
       font-size: 15px;
-    }
-
-    textarea {
-      resize: vertical;
     }
 
     .pay-btn {
@@ -102,7 +103,7 @@
       border: none;
       cursor: pointer;
       font-size: 16px;
-      text-decoration: none; /* ❌ NO UNDERLINE */
+      text-decoration: none;
     }
 
     footer {
@@ -115,13 +116,10 @@
 
 <body>
 
-  <!-- HERO -->
   <section class="hero"></section>
 
-  <!-- FLOATING BUTTON -->
   <button class="float-btn" id="floatBtn" onclick="scrollToForm()">Order Now</button>
 
-  <!-- DESCRIPTION -->
   <section class="section">
     <ul class="bullets">
       <li>⚡ Switch weights instantly — no breaks</li>
@@ -131,24 +129,20 @@
     </ul>
   </section>
 
-  <!-- FORM -->
   <section class="section" id="orderForm">
     <div class="form-box">
       <h2>Shipping Details</h2>
 
-      <input id="name" placeholder="Full Name" required>
-      <input id="phone" placeholder="Phone Number" required>
-      <input id="email" placeholder="Email Address" required>
-
-      <input id="flat" placeholder="Flat / Apartment No" required>
-      <input id="address" placeholder="Area / Street Name" required>
-      <input id="landmark" placeholder="Landmark" required>
-
-      <input id="district" placeholder="District" required>
-      <input id="state" placeholder="State" required>
-      <input id="pincode" placeholder="Pincode" required>
-
-      <input id="upi" placeholder="Your UPI ID (for record)" required>
+      <input id="name" placeholder="Full Name">
+      <input id="phone" placeholder="Phone Number" inputmode="numeric">
+      <input id="email" placeholder="Email Address">
+      <input id="flat" placeholder="Flat / Apartment No">
+      <input id="address" placeholder="Area / Street Name">
+      <input id="landmark" placeholder="Landmark">
+      <input id="district" placeholder="District">
+      <input id="state" placeholder="State">
+      <input id="pincode" placeholder="Pincode" inputmode="numeric">
+      <input id="upi" placeholder="Your UPI ID (for record)" inputmode="numeric">
 
       <button class="pay-btn" onclick="payAndSend()">Pay & Place Order</button>
     </div>
@@ -165,7 +159,7 @@
     document.getElementById("orderForm").scrollIntoView({ behavior: "smooth" });
   }
 
-  // Hide floating button when scrolling down
+  // Floating button hide/show
   let lastScroll = 0;
   window.addEventListener("scroll", () => {
     const btn = document.getElementById("floatBtn");
@@ -173,6 +167,15 @@
     btn.style.display = current > lastScroll ? "none" : "block";
     lastScroll = current;
   });
+
+  // ===== NUMBERS ONLY FILTER =====
+  function onlyNumbers(el) {
+    el.value = el.value.replace(/\D/g, "");
+  }
+
+  phone.oninput = () => onlyNumbers(phone);
+  pincode.oninput = () => onlyNumbers(pincode);
+  upi.oninput = () => onlyNumbers(upi);
 
   function payAndSend() {
     const data = {
@@ -188,16 +191,14 @@
       upi: upi.value
     };
 
-    // ✅ CLEAN, SPECIFIC EMAIL FORMAT
     emailjs.send("service_j229e6w", "template_n4l5sq5", data);
 
-    // ✅ MOBILE‑SAFE UPI LINK
     const payLink =
       `upi://pay?pa=7675842133@ybl` +
       `&pn=Dropset Pin` +
       `&am=999` +
       `&cu=INR` +
-      `&tn=Order from ${encodeURIComponent(data.name)}`;
+      `&tn=Order from ${encodeURIComponent(data.name || "Customer")}`;
 
     window.location.href = payLink;
   }
@@ -205,8 +206,4 @@
 
 </body>
 </html>
-
-
-
-
 
