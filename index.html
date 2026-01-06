@@ -21,18 +21,19 @@
     }
 
     /* ================= HERO SECTION ================= */
-    .hero {
-      height: 100vh;
-      background:
-        
-        url("Dropset pin (2).png"); /* 👈 HIGHLIGHTED */
-      
-      background-position: center;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 40px;
-    }
+   .hero {
+  height: 100vh;
+  background: 
+    url("Dropset pin (2).png"); /* 👈 SAME IMAGE */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain; /* ✅ THIS FIXES ZOOM */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+
 
     /* ================= FLOATING ORDER BUTTON ================= */
     .float-btn {
@@ -204,5 +205,6 @@
 
 </body>
 </html>
+
 
 
